@@ -11,7 +11,7 @@ let moveDir = '';
 
 function setup() {
     // set up webcam video
-    vidWidth = windowWidth / 3;
+    vidWidth = windowWidth / 4;
     vidHeight = vidWidth * 0.75;
 
     canvas = createCanvas(windowWidth, windowHeight);
@@ -29,7 +29,6 @@ function setup() {
 
 function draw() {
     showVideoFeed();
-
 }
 
 function showVideoFeed() {
@@ -41,19 +40,19 @@ function showVideoFeed() {
         // webcam video
         image(video, 0, 0, vidWidth, vidHeight);
 
+        // box to track head position
+        let ellipseDiameter = vidHeight * 0.15;
+        let ellipseRadius = ellipseDiameter / 2;
+        noStroke();
+        fill(159,239,53,90);
+        ellipseMode(CENTER);
+        ellipse( video.width / 2, (video.height / 2), ellipseDiameter, ellipseDiameter);
+        
+
         // pose tracking points
         drawKeypoints();
 
-        // box to track head position
-        let ellipseDiameter = vidHeight * 0.2;
-        let ellipseRadius = ellipseDiameter / 2;
-        noStroke();
-        fill(255,255,255,80);
-        ellipseMode(CENTER);
-        ellipse( video.width / 2, (video.height / 2), ellipseDiameter, ellipseDiameter);
-
         // head direction text
-
         if (faceY > video.height/2 + ellipseRadius) {
             moveDir = 'down';
         } else if (faceY < video.height/2 - ellipseRadius) {
@@ -67,11 +66,7 @@ function showVideoFeed() {
                     faceY < video.height/2 + ellipseRadius &&
                     faceY > video.height/2 - ellipseRadius ) {
             moveDir = 'none';
-
         }
-        // } else {
-        //     moveDir = '';
-        // }
 
         scale(-1,1);
         console.log(moveDir);
