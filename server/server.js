@@ -16,8 +16,8 @@ const server = app.listen(port, () => {
 app.use(express.static(path.join(__dirname, "../public")));
 
 app.engine('hbs', engine({
-  extname: '.hbs',
-  defaultLayout:false}));
+    extname: '.hbs',
+    defaultLayout:false}));
 app.set('view engine', 'hbs');
 
 // middleware
@@ -27,10 +27,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.get('/', (req, res) => {
-//   res.render('start');
-    res.redirect('/game');
+    res.render('start');
 })
 
 app.get('/game', (req,res) => {
     res.render('game');
+})
+
+app.get('/leaderboard', (req,res) => {
+    res.render('leaderboard');
+})
+
+app.get('/instructions', (req,res) => {
+    res.render('instructions');
 })
