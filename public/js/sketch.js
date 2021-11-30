@@ -8,9 +8,7 @@ let faceX = 0;
 let faceY = 0;
 
 // asteroids stuff
-let shipImg;
-let bulletImg;
-let particleImg;
+let shipImg, bulletImg, particleImg;
 
 let asteroidNum = 3;
 let asteroidImgs = [];
@@ -24,8 +22,9 @@ let moveDir = '';
 
 function preload() {
     shipImg = loadImage('assets/ship.png');
-    // bulletImg = loadImage('assets/bullet.png');
-    // particleImg = loadImage('assets/particle.png');
+    bulletImg = loadImage('assets/bullet.png');
+    particleImg = loadImage('assets/particle.png');
+
 
     for (let i = 0 ;i < asteroidNum; i++) {
         let asteroidImg = loadImage(`assets/asteroid${i}.png`);
@@ -61,10 +60,10 @@ function setup() {
     asteroids = new Group();
     bullets = new Group();
 
-    for(var i = 0; i<8; i++) {
-        var ang = random(360);
-        var px = width/2 + 1000 * cos(radians(ang));
-        var py = height/2+ 1000 * sin(radians(ang));
+    for(let i = 0; i<8; i++) {
+        let ang = random(360);
+        let px = width/2 + 1000 * cos(radians(ang));
+        let py = height/2+ 1000 * sin(radians(ang));
         createAsteroid(3, px, py);
     }
 }
@@ -72,17 +71,26 @@ function setup() {
 function draw() {
     background(0);
 
-    for(var i=0; i<allSprites.length; i++) {
-        var s = allSprites[i];
+    for(let i=0; i<allSprites.length; i++) {
+        let s = allSprites[i];
         if(s.position.x<-MARGIN) s.position.x = width+MARGIN;
         if(s.position.x>width+MARGIN) s.position.x = -MARGIN;
         if(s.position.y<-MARGIN) s.position.y = height+MARGIN;
         if(s.position.y>height+MARGIN) s.position.y = -MARGIN;
     }
 
+    asteroids.overlap(ship, asteroidHit);
     asteroids.overlap(bullets, asteroidHit);
 
     ship.bounce(asteroids);
+
+    if (keyWentDown('x')) {
+        let bullet = createSprite(ship.position.x, ship.position.y);
+        bullet.addImage(bulletImg);
+        bullet.setSpeed(10+ship.getSpeed(), ship.rotation);
+        bullet.life = 30;
+        bullets.add(bullet);
+    }
 
     drawSprites();
     showVideoFeed();
@@ -114,6 +122,7 @@ function showVideoFeed() {
             moveDir = 'down';
         } else if (faceY < video.height/2 - ellipseRadius) {
             moveDir = 'up';
+            ship.addSpeed(0.2, ship.rotation);
         } else if (faceX < video.width/2 - ellipseRadius) {
             moveDir = 'right';
             ship.rotation += 4;
