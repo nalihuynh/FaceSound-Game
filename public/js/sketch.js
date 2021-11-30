@@ -1,13 +1,37 @@
+// webcam video stuff
 let video, vidWidth, vidHeight;
 
+// face tracking stuff
 let poseNet;
 let poses = [];
 let faceX = 0;
 let faceY = 0;
 
-let canvas;
+// asteroids stuff
+let shipImg;
+let bulletImg;
+let particleImg;
 
+let asteroidNum = 3;
+let asteroidImgs = [];
+
+let bullets, asteroids, ship;
+let MARGIN = 40;
+
+// other
+let canvas;
 let moveDir = '';
+
+function preload() {
+    shipImg = loadImage('assets/ship.png');
+    // bulletImg = loadImage('assets/bullet.png');
+    // particleImg = loadImage('assets/particle.png');
+
+    for (let i = 0 ;i < asteroidNum; i++) {
+        let asteroidImg = loadImage(`assets/asteroid${i}.png`);
+        asteroidImgs.push(asteroidImg);
+    }
+}
 
 function setup() {
     // set up webcam video
@@ -25,9 +49,42 @@ function setup() {
     // set up pose tracking
     poseNet = ml5.poseNet(video, modelReady);
     poseNet.on('pose', findFaceOnPoses);
+
+    // asteroids stuff
+    ship = createSprite(width/2, height/2);
+    ship.maxSpeed = 6;
+    ship.friction = 0.98;
+    ship.setCollider('circle', 0,0,20);
+
+    ship.addImage('normal', shipImg);
+
+    asteroids = new Group();
+    bullets = new Group();
+
+    for(var i = 0; i<8; i++) {
+        var ang = random(360);
+        var px = width/2 + 1000 * cos(radians(ang));
+        var py = height/2+ 1000 * sin(radians(ang));
+        createAsteroid(3, px, py);
+    }
 }
 
 function draw() {
+    background(0);
+
+    for(var i=0; i<allSprites.length; i++) {
+        var s = allSprites[i];
+        if(s.position.x<-MARGIN) s.position.x = width+MARGIN;
+        if(s.position.x>width+MARGIN) s.position.x = -MARGIN;
+        if(s.position.y<-MARGIN) s.position.y = height+MARGIN;
+        if(s.position.y>height+MARGIN) s.position.y = -MARGIN;
+    }
+
+    asteroids.overlap(bullets, asteroidHit);
+
+    ship.bounce(asteroids);
+
+    drawSprites();
     showVideoFeed();
 }
 
@@ -59,8 +116,10 @@ function showVideoFeed() {
             moveDir = 'up';
         } else if (faceX < video.width/2 - ellipseRadius) {
             moveDir = 'right';
+            ship.rotation += 4;
         } else if (faceX > video.width/2 + ellipseRadius) {
             moveDir = 'left';
+            ship.rotation -= 4;
         } else if (faceX < video.width/2 + ellipseRadius &&
                     faceX > video.width/2 - ellipseRadius &&
                     faceY < video.height/2 + ellipseRadius &&
@@ -69,7 +128,7 @@ function showVideoFeed() {
         }
 
         scale(-1,1);
-        console.log(moveDir);
+        // console.log(moveDir);
 
         textSize(12);
         fill(255);
