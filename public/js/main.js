@@ -1,4 +1,4 @@
-let currentScreen = 'setup';
+let currentScreen = '';
 
 // webcam video stuff
 let video, vidWidth, vidHeight;
@@ -12,6 +12,7 @@ let ellipseDiameter; // ellipse for tracking head movement
 
 // audio stuff
 let mic;
+let volume;
 
 // asteroids stuff
 let shipImg, bulletImg, particleImg;
@@ -27,6 +28,7 @@ let MARGIN = 50;
 let canvas;
 
 let start = false;
+let userClicks = 0;
 let instructionsText = '';
 
 function preload() {
@@ -60,7 +62,9 @@ function setup() {
     poseNet.on('pose', findFaceOnPoses);
 
     // audio stuff
+    getAudioContext().suspend();
     mic = new p5.AudioIn();
+    mic.start();
 
     // asteroids stuff
     ship = createSprite(width/2, height/2);
@@ -82,55 +86,64 @@ function setup() {
 }
 
 function draw() {
+    background(0);
+
     switch (currentScreen) {
-        case 'setup':
-            // console.log('setup screen');
-            drawSetup();
+        case 'moveTutorial':
+            drawTutorial('move');
+            break;
+        case 'shootTutorial':
+            drawTutorial('shoot');
             break;
         case 'game':
-            console.log('game screen');
             playGame();
+            break;
+        case '':
+            textAlign(CENTER);
+            textSize(12);
+            fill(255);
+
+            text('click to start tutorial.\npress space to skip.', width/2, height/2);
             break;
     }
 }
 
 function mousePressed() {
+    userClicks += 1;
+    if (!start && userClicks == 1) {
+        getAudioContext().resume();
+        volume = mic.getLevel();
+
+        currentScreen = 'moveTutorial';
+    }
+
+    if (start && userClicks == 2) {
+        currentScreen = 'shootTutorial';
+    }
+    
     start = true;
 }
 
 function keyPressed() {
-    if (start && key == ' ') {
+    if (key == ' ') {
         currentScreen = 'game';
     }
 }
 
-function drawSetup() {
-    background(0);
+function drawTutorial(tutorialType) {
+    translate((windowWidth - vidWidth) / 2, (windowHeight - vidHeight) / 2);
+    imageMode(CORNER);
 
-    textAlign(CENTER);
-    textSize(12);
-    fill(255);
-
-    if (!start) {
-        text('click to start tutorial.', width/2, height/2);
-    }
-    else { // user clicked start
-        mic.start();
-        let volume = mic.getLevel();
-        console.log(volume);
+    push();
+    translate(video.width, 0);
+    scale(-1,1);
     
-        translate((windowWidth - vidWidth) / 2, (windowHeight - vidHeight) / 2);
-        imageMode(CORNER);
-        
-        push();
-        translate(video.width, 0);
-        scale(-1,1);
-    
-        image(video, 0, 0, vidWidth, vidHeight);
+    image(video, 0, 0, vidWidth, vidHeight);
 
+    if (tutorialType == 'move') {
         // pose tracking points
         drawKeypoints();
-    
+        
         // box to track head position
         let ellipseRadius = ellipseDiameter / 2;
         noStroke();
@@ -140,7 +153,7 @@ function drawSetup() {
 
         // instructions
         scale(-1,1);
-        let millis1 = millis();
+
         instructionsText = 'place your head in the center by moving your nose within the green circle.\n' + 
             'then, move your head up, down, left, and right for player controls.\n\n' +
             'rotate / aim the ship by moving left and right.\nmove forward and backward by moving your head up and down.';
@@ -158,12 +171,12 @@ function drawSetup() {
         if (faceY > video.height/2 + ellipseRadius) {
             push();
             scale(-1,1);
-            text('down', -video.width/2, faceY + textPadding);
+            text('down', -video.width/2, constrain(faceY + textPadding, 0, video.height));
             pop();
         } else if (faceY < video.height/2 - ellipseRadius) {
             push();
             scale(-1,1);
-            text('up', -video.width/2, faceY - textPadding);
+            text('up', -video.width/2, constrain(faceY - textPadding, 0, video.height));
             pop();
         } else if (faceX < video.width/2 - ellipseRadius) {
             push();
@@ -175,17 +188,35 @@ function drawSetup() {
             scale(-1,1);
             text('left', -faceX - textPadding, video.height/2);
             pop();
-        } else if (faceX < video.width/2 + ellipseRadius &&
-                    faceX > video.width/2 - ellipseRadius &&
-                    faceY < video.height/2 + ellipseRadius &&
-                    faceY > video.height/2 - ellipseRadius ) {
-
         }
     
         scale(-1,1);
-        text('ready to start? press space', -video.width/2, video.height + 50);
+        textAlign(LEFT);
+        text('click to proceed to the next step.', -video.width, video.height + 50);
 
         pop();
+    } else if (tutorialType == 'shoot') {
+        scale(-1,1);
+
+        instructionsText = 'shoot bullets by making noise into your microphone.\nthe louder your noise, the further your bullet will travel.';
+
+        fill(255);
+        textWrap(WORD);
+        textAlign(LEFT);
+        text(instructionsText, -video.width, -50, windowWidth / 3);
+
+        textAlign(LEFT);
+        text('ready to play? press space to start.', -video.width, video.height + 50);
+
+        // audio meter
+        noStroke();
+        fill(227,63,95);
+        rect( 20, 0, 15, video.height);
+
+        console.log(volume * 200);
+        let volumeHeight = map (volume * 200, 0, 150, video.height, 0);
+        fill(255)
+        rect(20,0,15,volumeHeight);
     }
 }
 

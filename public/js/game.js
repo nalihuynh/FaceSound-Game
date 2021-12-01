@@ -25,10 +25,10 @@ function playGame() {
     }
 
     drawSprites();
-    showVideoFeed();
+    showPlayer();
 }
 
-function showVideoFeed() {
+function showPlayer() {
     push();
         imageMode(CORNER);
         translate(video.width,windowHeight - vidHeight);
@@ -49,28 +49,31 @@ function showVideoFeed() {
 
         // head direction text
         if (faceY > video.height/2 + ellipseRadius) {
-            moveDir = 'down';
+            // down
+            if (ship.position.y < windowHeight - 50) {
+                ship.velocity.y = 75;
+            }
         } else if (faceY < video.height/2 - ellipseRadius) {
-            moveDir = 'up';
-            ship.addSpeed(0.2, ship.rotation);
+            // up
+            if (ship.position.y > 50) {
+                ship.velocity.y = -75;
+            }
+            
         } else if (faceX < video.width/2 - ellipseRadius) {
-            moveDir = 'right';
+            // right
+            
             ship.rotation += 4;
         } else if (faceX > video.width/2 + ellipseRadius) {
-            moveDir = 'left';
+            // left
+            
             ship.rotation -= 4;
         } else if (faceX < video.width/2 + ellipseRadius &&
                     faceX > video.width/2 - ellipseRadius &&
                     faceY < video.height/2 + ellipseRadius &&
                     faceY > video.height/2 - ellipseRadius ) {
-            moveDir = 'none';
+            // center
+            ship.velocity.x = 0;
+            ship.velocity.y = 0;
         }
-
-        scale(-1,1);
-
-        textSize(12);
-        fill(255);
-        textAlign(CENTER);
-        // text('direction: ' + moveDir, - video.width/2, 25);
     pop();
 }
