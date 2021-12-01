@@ -3,12 +3,17 @@ let totalLives = 5;
 let livesNum = 5;
 
 let rotationSpeed = 5;
-let shipAcceleration = 1;
+let shipAcceleration = 0.5;
 
 let volumeThreshold = 5;
 
 function playGame() {
-    background(0);
+    c1 = color(155,220,48);
+    c2 = color(9, 59, 202);
+
+    // gradient background
+    setGradient(0, 0, windowWidth, windowHeight, c1, c2, 1);
+
     let volume = mic.getLevel();
     // console.log(volume);
 
@@ -77,22 +82,32 @@ function showPlayer() {
         ellipse( video.width / 2, (video.height / 2), ellipseDiameter, ellipseDiameter);
 
         // pose tracking points
-        drawKeypoints();
+        // drawKeypoints();
+        fill(255);
+        rectMode(CENTER);
+        rect(faceX, faceY, 5,5);
 
         // head direction text
         if (faceY > video.height/2 + ellipseRadius) {
             // down
-            if (ship.position.y < windowHeight - 50) {
+            if (ship.position.x > 50 &&
+                ship.position.x < windowWidth - 50 &&
+                ship.position.y > 50 && 
+                ship.position.y < windowHeight - 50
+            ) {
                 ship.addSpeed(-shipAcceleration, ship.rotation);
             }
         } else if (faceY < video.height/2 - ellipseRadius) {
             // up
-            if (ship.position.y > 50) {
+            if (ship.position.x > 50 &&
+                ship.position.x < windowWidth - 50 &&
+                ship.position.y > 50 && 
+                ship.position.y < windowHeight - 50
+            ) {
                 ship.addSpeed(shipAcceleration, ship.rotation);
             }
         } else if (faceX < video.width/2 - ellipseRadius) {
             // right
-            
             ship.rotation += rotationSpeed;
         } else if (faceX > video.width/2 + ellipseRadius) {
             // left
@@ -105,6 +120,9 @@ function showPlayer() {
             ship.velocity.x = 0;
             ship.velocity.y = 0;
         }
+
+        console.log(ship.position);
+
     pop();
 }
 
@@ -120,4 +138,17 @@ function checkForGameOver() {
         let playerScore = select('#score');
         playerScore.elt.innerHTML = score;
     }
+}
+
+// creates gradients
+function setGradient(x, y, w, h, c1, c2, axis) {
+	noFill();
+	if (axis == 1) {  // Top to bottom gradient
+   	for (var i = y; i <= y+h; i++) {
+    	var inter = map(i, y, y+h, 0, 1);
+    	var c = lerpColor(c1, c2, inter);
+    	stroke(c);
+    	line(x, i, x+w, i);
+   	}
+ 	}
 }
