@@ -83,7 +83,7 @@ function showPlayer() {
         if (faceY > video.height/2 + ellipseRadius) {
             // down
             if (ship.position.y < windowHeight - 50) {
-                ship.addSpeed(shipAcceleration, ship.rotation);
+                ship.addSpeed(-shipAcceleration, ship.rotation);
             }
         } else if (faceY < video.height/2 - ellipseRadius) {
             // up
