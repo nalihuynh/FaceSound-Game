@@ -3,7 +3,7 @@ let totalLives = 5;
 let livesNum = 5;
 
 let rotationSpeed = 5;
-let shipVelocity = 75;
+let shipAcceleration = 1;
 
 let volumeThreshold = 5;
 
@@ -83,12 +83,12 @@ function showPlayer() {
         if (faceY > video.height/2 + ellipseRadius) {
             // down
             if (ship.position.y < windowHeight - 50) {
-                ship.velocity.y = shipVelocity;
+                ship.addSpeed(-shipAcceleration, ship.rotation);
             }
         } else if (faceY < video.height/2 - ellipseRadius) {
             // up
             if (ship.position.y > 50) {
-                ship.velocity.y = -shipVelocity;
+                ship.addSpeed(shipAcceleration, ship.rotation);
             }
         } else if (faceX < video.width/2 - ellipseRadius) {
             // right
