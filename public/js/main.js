@@ -70,7 +70,7 @@ function setup() {
     // asteroids stuff
     ship = createSprite(width/2, height/2);
     ship.maxSpeed = 10;
-    ship.friction = 0.98;
+    ship.friction = 0.08;
     ship.setCollider('circle', 0,0,20);
     ship.addImage('normal', shipImg);
     
