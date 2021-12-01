@@ -1,7 +1,16 @@
+let score = 0;
+let totalLives = 5;
+let livesNum = 5;
+
+let rotationSpeed = 5;
+let shipVelocity = 75;
+
+let volumeThreshold = 5;
+
 function playGame() {
     background(0);
     let volume = mic.getLevel();
-    console.log(volume);
+    // console.log(volume);
 
     for(let i=0; i<allSprites.length; i++) {
         let s = allSprites[i];
@@ -11,12 +20,13 @@ function playGame() {
         if(s.position.y>height+MARGIN) s.position.y = -MARGIN;
     }
 
-    asteroids.overlap(ship, asteroidHit);
+    asteroids.overlap(ship, shipHit);
     asteroids.overlap(bullets, asteroidHit);
 
     ship.bounce(asteroids);
 
-    if (!ship.removed && volume * 200 > 5) {
+    console.log(volume*200);
+    if (!ship.removed && volume * 200 > volumeThreshold) {
         let bullet = createSprite(ship.position.x, ship.position.y);
         bullet.addImage(bulletImg);
         bullet.setSpeed(10 + ship.getSpeed(), ship.rotation);
@@ -25,7 +35,27 @@ function playGame() {
     }
 
     drawSprites();
+
+    drawUI();
     showPlayer();
+}
+
+function drawUI() {
+    // draw lives left
+    for (let i = 0; i < totalLives; i++) {
+        if (i < livesNum) {
+            fill(255,0,0);
+        } else {
+            fill(255);
+        }
+        
+        noStroke();
+        rect(25 * i + 30, 30, 10,10);
+    }
+
+    // draw score
+    fill(255);
+    text(`score: ${score}`, windowWidth - 100, 30);
 }
 
 function showPlayer() {
@@ -51,22 +81,20 @@ function showPlayer() {
         if (faceY > video.height/2 + ellipseRadius) {
             // down
             if (ship.position.y < windowHeight - 50) {
-                ship.velocity.y = 75;
+                ship.velocity.y = shipVelocity;
             }
         } else if (faceY < video.height/2 - ellipseRadius) {
             // up
             if (ship.position.y > 50) {
-                ship.velocity.y = -75;
+                ship.velocity.y = -shipVelocity;
             }
-            
         } else if (faceX < video.width/2 - ellipseRadius) {
             // right
             
-            ship.rotation += 4;
+            ship.rotation += rotationSpeed;
         } else if (faceX > video.width/2 + ellipseRadius) {
             // left
-            
-            ship.rotation -= 4;
+            ship.rotation -= rotationSpeed;
         } else if (faceX < video.width/2 + ellipseRadius &&
                     faceX > video.width/2 - ellipseRadius &&
                     faceY < video.height/2 + ellipseRadius &&

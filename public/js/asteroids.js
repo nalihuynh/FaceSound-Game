@@ -5,7 +5,7 @@ function createAsteroid(type, x, y) {
   a.addImage(img);
   a.setSpeed(2.5-(type/2), random(360));
   a.rotationSpeed = 0.5;
-  //a.debug = true;
+  // a.debug = true;
   a.type = type;
   
   if (type == 2) {
@@ -22,15 +22,22 @@ function createAsteroid(type, x, y) {
 }
 
 function asteroidHit(asteroid, bullet) {
+  let particleNum = 10;
+
   if (bullet.removed) {return;}
+
   var newType = asteroid.type-1;
   
+  // split hit asteroid into smaller pieces
   if(newType>0) {
     createAsteroid(newType, asteroid.position.x, asteroid.position.y);
     createAsteroid(newType, asteroid.position.x, asteroid.position.y);
+  } else {
+    console.log('hit ship');
   }
   
-  for(var i=0; i<10; i++) {
+  // add explosion particles
+  for(var i=0; i<particleNum; i++) {
     var p = createSprite(bullet.position.x, bullet.position.y);
     p.addImage(particleImg);
     p.setSpeed(random(3, 5), random(360));
@@ -38,6 +45,27 @@ function asteroidHit(asteroid, bullet) {
     p.life = 15;
   }
   
+  score += 10;
+  
   bullet.remove();
   asteroid.remove();
+}
+
+function shipHit(bullet) {
+  let particleNum = 5;
+
+  if (bullet.removed) {return;}
+  
+  // add explosion particles
+  for(var i=0; i<particleNum; i++) {
+    var p = createSprite(bullet.position.x, bullet.position.y);
+    p.addImage(particleImg);
+    p.setSpeed(random(3, 5), random(360));
+    p.friction = 0.95;
+    p.life = 15;
+  }
+
+  livesNum -= 1;
+  
+  bullet.remove();
 }

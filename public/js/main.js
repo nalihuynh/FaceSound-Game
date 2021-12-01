@@ -71,7 +71,6 @@ function setup() {
     ship.maxSpeed = 10;
     ship.friction = 0.98;
     ship.setCollider('circle', 0,0,20);
-    
     ship.addImage('normal', shipImg);
     
     asteroids = new Group();
@@ -109,24 +108,31 @@ function draw() {
 }
 
 function mousePressed() {
-    userClicks += 1;
-    if (!start && userClicks == 1) {
-        getAudioContext().resume();
-        volume = mic.getLevel();
+    if (currentScreen != 'game') {
+        userClicks += 1;
+        if (!start && userClicks == 1) {
+            getAudioContext().resume();
+            volume = mic.getLevel();
 
-        currentScreen = 'moveTutorial';
-    }
+            currentScreen = 'moveTutorial';
+        }
 
-    if (start && userClicks == 2) {
-        currentScreen = 'shootTutorial';
+        if (start && userClicks == 2) {
+            currentScreen = 'shootTutorial';
+        }
+        
+        start = true;
     }
-    
-    start = true;
 }
 
 function keyPressed() {
-    if (key == ' ') {
+    if (key == ' ' && currentScreen != 'game') {
         currentScreen = 'game';
+
+        if (volume == null) {
+            getAudioContext().resume();
+            volume = mic.getLevel();
+        }
     }
 }
 
