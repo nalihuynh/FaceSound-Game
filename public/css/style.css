@@ -38,7 +38,7 @@ body, html {
     margin: 0 10%;
 }
 
-.start-screen {
+.start-screen, .instructions-screen {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -53,13 +53,15 @@ body, html {
 }
 
 .submenu-title {
-    margin-top: 20em;
+    margin-top: 12em;
     margin-bottom: 1em;
+    font-size: 15px;
 }
 
 .instructions {
     width: 40%;
     margin-bottom: 2em;
+    font-size: inherit;
 }
 
 .btns-div {
