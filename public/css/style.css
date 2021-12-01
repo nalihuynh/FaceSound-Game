@@ -175,3 +175,23 @@ a {
     color: black;
     text-decoration: none;
 }
+
+
+.leaderboard {
+    list-style-type: none;
+    width: 60%;
+    margin: 0 20%;
+    border: 2px dotted white;
+    padding:0;
+}
+
+.leaderboard-listing, .header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.header {
+    border-bottom: 2px dotted white;
+}

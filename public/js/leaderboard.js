@@ -1,6 +1,11 @@
 $(document).ready(() => {
     console.log('jquery connected');
 
+    // increment rank num
+    $( ".leaderboard-rank" ).each(function( index ) {
+        $(this).text( parseInt($(this).text()) + 1);
+    });
+
     $("#save-score-btn").click(() => {
         console.log('saving score');
 

@@ -2,7 +2,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>facesound game - Leaderboard</title>
+    <title>facesound game - leaderboard</title>
 
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
@@ -10,23 +10,31 @@
 <body>
     <div class="container">
         <div class="content start-screen">
-            <div class="submenu-title"><h2>Leaderboard</h2></div>
+            <div class="submenu-title"><p>Leaderboard</p></div>
             <ol class="leaderboard">
-                {{#each listings}}
+                <li class="header leaderboard-listing">
+                        <span class="header-rank">rank</span> 
+                        <span class="header-name">player name</span> 
+                        <span class="header-score">score</span>
+                </li>
+
+                {{#each listings as |item i|}}
                     <li class="leaderboard-listing">
-                        <span class = "name">{{playerName}}</span> 
-                        <span class = "score">{{score}}</span>
+                        <span class="leaderboard-rank">{{i}}</span> 
+                        <span class="leaderboard-name">{{playerName}}</span> 
+                        <span class="leaderboard-score">{{score}}</span>
                     </li>
                 {{/each}}
             </ol>
             <a href="/">
-                <button class="start-btn" id="menu-btn">back to menu</button>
+                <button id="back-btn">back to menu</button>
             </a>
         </div>
     </div>
 
   <!-- Jquery -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/js/leaderboard.js"></script> 
 </body>
 
 </html>
