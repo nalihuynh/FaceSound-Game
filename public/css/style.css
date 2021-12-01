@@ -52,6 +52,16 @@ body, html {
     margin-bottom: 10em;
 }
 
+.submenu-title {
+    margin-top: 20em;
+    margin-bottom: 1em;
+}
+
+.instructions {
+    width: 40%;
+    margin-bottom: 2em;
+}
+
 .btns-div {
     height: 15em;
     display: flex;

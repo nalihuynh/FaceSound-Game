@@ -3,6 +3,7 @@ const hbs = require('hbs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const { engine } = require('express-handlebars');
+const { getHighScores } = require('./firestore');
 
 // set up port
 const port = process.env.PORT || 3000;
@@ -34,8 +35,10 @@ app.get('/game', (req,res) => {
     res.render('game');
 })
 
-app.get('/leaderboard', (req,res) => {
-    res.render('leaderboard');
+app.get('/leaderboard', (req,res) => { 
+    getHighScores().then(listings => {
+        res.render('leaderboard', { listings });
+    })
 })
 
 app.get('/instructions', (req,res) => {

@@ -1,0 +1,57 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>facesound game - Instructions</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="content start-screen">
+            <div class="submenu-title"><h2>How To Play</h2></div>
+            <div class="instructions">
+                <b>FaceSound</b> is a simple game based off of the famous arcade game,
+                <em>Asteroids</em>.
+                <br><br>
+                To begin, make sure to enable webcam access so that the face
+                detection library can track your face's position. You will
+                be using your face to steer your spacecraft!
+                <br><br>
+                Also make sure to enable microphone access so that you can shoot
+                projectiles. Make an abrupt noise to cause a missile to launch
+                from your spacecraft in the direction it is currently pointed.
+                <br><br>
+                <hr>
+                <h3>Controls</h3>
+                <ul>
+                    <li>face up : forward thrust</li>
+                    <li>face down : backward thrust</li>
+                    <li>face left : rotate counter-clockwise</li>
+                    <li>face right : rotate clockwise</li>
+                    <li>shout : shoot missile</li>
+                </ul>
+                <em>Try it yourself</em>: How does your missile change depending on the volume of your shout?
+                <br><br>
+                <hr>
+                <h3>Scoring & Objectives</h3>
+                Your spacecraft is built to destroy incoming asteroids. For each
+                asteroid destroyed, your mining company awards you <b>{num} points</b>.
+                <br><br>
+                However, the mining company chose to cut costs on safety, and your
+                spacecraft is vulnerable to direct collisions with asteroids! You
+                have <b>{num} lives</b> (collisions) before your spacecraft explodes,
+                and <b>Game Over!</b>
+            </div>
+            <a href="/">
+                <button class="start-btn" id="menu-btn">back to menu</button>
+            </a>
+        </div>
+    </div>
+
+  <!-- Jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</body>
+
+</html>
