@@ -3,7 +3,7 @@ const hbs = require('hbs');
 const path = require('path');
 const bodyParser = require('body-parser');
 const { engine } = require('express-handlebars');
-const { getHighScores } = require('./firestore');
+const { getHighScores, submitHighScore } = require('./firestore');
 
 // set up port
 const port = process.env.PORT || 3000;
@@ -33,6 +33,17 @@ app.get('/', (req, res) => {
 
 app.get('/game', (req,res) => {
     res.render('game');
+})
+
+app.post('/game', (req, res) => {
+    let name = req.body.name;
+    let score = req.body.score;
+    console.log(`name: ${name}\nscore: ${score}`);
+
+    // save to firestore database
+    submitHighScore(name, score);
+
+    res.end('success');
 })
 
 app.get('/leaderboard', (req,res) => { 

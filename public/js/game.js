@@ -25,7 +25,6 @@ function playGame() {
 
     ship.bounce(asteroids);
 
-    console.log(volume*200);
     if (!ship.removed && volume * 200 > volumeThreshold) {
         let bullet = createSprite(ship.position.x, ship.position.y);
         bullet.addImage(bulletImg);
@@ -34,10 +33,13 @@ function playGame() {
         bullets.add(bullet);
     }
 
+    // display game
     drawSprites();
-
     drawUI();
     showPlayer();
+
+    // check if game is over (no lives left)
+    checkForGameOver();
 }
 
 function drawUI() {
@@ -104,4 +106,18 @@ function showPlayer() {
             ship.velocity.y = 0;
         }
     pop();
+}
+
+function checkForGameOver() {
+    if (livesNum <= 0) {
+        noLoop(); // freeze game
+
+        // show game over div
+        let gameOverDiv = select('#gameover-div');
+        gameOverDiv.elt.style.display = "flex";
+
+        // add score
+        let playerScore = select('#score');
+        playerScore.elt.innerHTML = score;
+    }
 }

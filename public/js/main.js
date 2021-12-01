@@ -43,6 +43,10 @@ function preload() {
 }
 
 function setup() {
+    // // hide game over div
+    // let gameOverDiv = select('#gameover-div');
+    // gameOverDiv.elt.style.display = "none";
+
     // set up webcam video
     vidWidth = windowWidth / 3;
     vidHeight = vidWidth * 0.75;
