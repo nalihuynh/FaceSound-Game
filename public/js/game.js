@@ -7,6 +7,8 @@ let shipAcceleration = 0.5;
 
 let volumeThreshold = 5;
 
+let toggleBullet = false;
+
 function playGame() {
     c1 = color(155,220,48);
     c2 = color(9, 59, 202);
@@ -30,7 +32,18 @@ function playGame() {
 
     ship.bounce(asteroids);
 
-    if (!ship.removed && volume * 200 > volumeThreshold) {
+    // shoot bullet
+    if (!ship.removed) {
+        if (!toggleBullet && volume * 200 > volumeThreshold) {
+            toggleBullet = true;
+        }
+
+        if (volume * 200 <= volumeThreshold) {
+            toggleBullet = false;
+        }
+    }
+
+    if (toggleBullet) {
         let bullet = createSprite(ship.position.x, ship.position.y);
         bullet.addImage(bulletImg);
         bullet.setSpeed(10 + ship.getSpeed(), ship.rotation);
@@ -39,9 +52,9 @@ function playGame() {
     }
 
     // display game
+    showPlayerAndControls();
     drawSprites();
     drawUI();
-    showPlayer();
 
     // check if game is over (no lives left)
     checkForGameOver();
@@ -65,7 +78,7 @@ function drawUI() {
     text(`score: ${score}`, windowWidth - 100, 30);
 }
 
-function showPlayer() {
+function showPlayerAndControls() {
     push();
         imageMode(CORNER);
         translate(video.width,windowHeight - vidHeight);
@@ -74,54 +87,31 @@ function showPlayer() {
         // webcam video
         image(video, 0, 0, vidWidth, vidHeight);
 
-        // box to track head position
-        let ellipseRadius = ellipseDiameter / 2;
-        noStroke();
-        fill(159,239,53,90); // translucent green
-        ellipseMode(CENTER);
-        ellipse( video.width / 2, (video.height / 2), ellipseDiameter, ellipseDiameter);
+        // gamepad img
+        imageMode(CENTER);
+        image( gamePadImg, video.width/2, video.height/2, ellipseDiameter, ellipseDiameter);
 
-        // pose tracking points
-        // drawKeypoints();
+        rectMode(CENTER)
+
+        // draw tiny square for nose
         fill(255);
-        rectMode(CENTER);
-        rect(faceX, faceY, 5,5);
+        textSize(30);
+        text('+', faceX, faceY);
 
         // head direction text
         if (faceY > video.height/2 + ellipseRadius) {
             // down
-            if (ship.position.x > 50 &&
-                ship.position.x < windowWidth - 50 &&
-                ship.position.y > 50 && 
-                ship.position.y < windowHeight - 50
-            ) {
-                ship.addSpeed(-shipAcceleration, ship.rotation);
-            }
+            ship.addSpeed(-shipAcceleration, ship.rotation);
         } else if (faceY < video.height/2 - ellipseRadius) {
             // up
-            if (ship.position.x > 50 &&
-                ship.position.x < windowWidth - 50 &&
-                ship.position.y > 50 && 
-                ship.position.y < windowHeight - 50
-            ) {
-                ship.addSpeed(shipAcceleration, ship.rotation);
-            }
+            ship.addSpeed(shipAcceleration, ship.rotation);
         } else if (faceX < video.width/2 - ellipseRadius) {
             // right
             ship.rotation += rotationSpeed;
         } else if (faceX > video.width/2 + ellipseRadius) {
             // left
             ship.rotation -= rotationSpeed;
-        } else if (faceX < video.width/2 + ellipseRadius &&
-                    faceX > video.width/2 - ellipseRadius &&
-                    faceY < video.height/2 + ellipseRadius &&
-                    faceY > video.height/2 - ellipseRadius ) {
-            // center
-            ship.velocity.x = 0;
-            ship.velocity.y = 0;
         }
-
-        console.log(ship.position);
 
     pop();
 }

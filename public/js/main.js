@@ -4,11 +4,13 @@ let currentScreen = '';
 let video, vidWidth, vidHeight;
 
 // face tracking stuff
+let gamePadImg;
 let poseNet;
 let poses = [];
 let faceX = 0;
 let faceY = 0;
 let ellipseDiameter; // ellipse for tracking head movement
+let ellipseRadius = 15;
 
 // audio stuff
 let mic;
@@ -32,6 +34,7 @@ let userClicks = 0;
 let instructionsText = '';
 
 function preload() {
+    gamePadImg = loadImage('assets/gamepad.png');
     shipImg = loadImage('assets/ship.png');
     bulletImg = loadImage('assets/bullet.png');
     particleImg = loadImage('assets/particle.png');
@@ -48,7 +51,8 @@ function setup() {
     vidWidth = windowWidth / 3;
     vidHeight = vidWidth * 0.75;
 
-    ellipseDiameter = vidHeight * 0.1;
+    // ellipseDiameter = vidHeight * 0.1;
+    ellipseDiameter = vidHeight * .3;
 
     canvas = createCanvas(windowWidth, windowHeight);
     background(0);
@@ -142,15 +146,18 @@ function drawTutorial(tutorialType) {
     image(video, 0, 0, vidWidth, vidHeight);
 
     if (tutorialType == 'move') {
-        // pose tracking points
-        drawKeypoints();
-        
-        // box to track head position
-        let ellipseRadius = ellipseDiameter / 2;
-        noStroke();
-        fill(159,239,53,90); // translucent green
-        // ellipseMode(CORNER);
-        ellipse( video.width/2, video.height/2, ellipseDiameter, ellipseDiameter);
+
+        // gamepad img
+        push();
+        imageMode(CENTER);
+        image( gamePadImg, video.width/2, video.height/2, ellipseDiameter, ellipseDiameter);
+
+        // draw tiny square for nose
+        fill(255);
+        textSize(30);
+        text('+', faceX, faceY);
+
+        pop();
 
         // instructions
         scale(-1,1);
@@ -167,27 +174,27 @@ function drawTutorial(tutorialType) {
         // head direction text
         scale(-1,1);
         textAlign(CENTER);
-        let textPadding = 20;
+        let textPadding = 50;
 
         if (faceY > video.height/2 + ellipseRadius) {
             push();
             scale(-1,1);
-            text('down', -video.width/2, constrain(faceY + textPadding, 0, video.height));
+            text('thrust backwards', -video.width/2, constrain(faceY + textPadding, 0, video.height));
             pop();
         } else if (faceY < video.height/2 - ellipseRadius) {
             push();
             scale(-1,1);
-            text('up', -video.width/2, constrain(faceY - textPadding, 0, video.height));
+            text('thrust forwards', -video.width/2, constrain(faceY - textPadding, 0, video.height));
             pop();
         } else if (faceX < video.width/2 - ellipseRadius) {
             push();
             scale(-1,1);
-            text('right', -faceX + textPadding, video.height/2);
+            text('rotate right', -faceX + textPadding, video.height/2);
             pop();
         } else if (faceX > video.width/2 + ellipseRadius) {
             push();
             scale(-1,1);
-            text('left', -faceX - textPadding, video.height/2);
+            text('rotate left', -faceX - textPadding, video.height/2);
             pop();
         }
     
@@ -215,8 +222,8 @@ function drawTutorial(tutorialType) {
         rect( 20, 0, 15, video.height);
 
         volume = mic.getLevel();
-        console.log(volume * 200);
         let volumeHeight = map (volume * 200, 0, 150, video.height, 0);
+        
         fill(255)
         rect(20,0,15,volumeHeight);
     }
