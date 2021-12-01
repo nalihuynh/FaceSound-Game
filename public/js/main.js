@@ -43,9 +43,6 @@ function preload() {
 }
 
 function setup() {
-    // // hide game over div
-    // let gameOverDiv = select('#gameover-div');
-    // gameOverDiv.elt.style.display = "none";
 
     // set up webcam video
     vidWidth = windowWidth / 3;
@@ -116,8 +113,6 @@ function mousePressed() {
         userClicks += 1;
         if (!start && userClicks == 1) {
             getAudioContext().resume();
-            volume = mic.getLevel();
-
             currentScreen = 'moveTutorial';
         }
 
@@ -132,11 +127,7 @@ function mousePressed() {
 function keyPressed() {
     if (key == ' ' && currentScreen != 'game') {
         currentScreen = 'game';
-
-        if (volume == null) {
-            getAudioContext().resume();
-            volume = mic.getLevel();
-        }
+        getAudioContext().resume();
     }
 }
 
@@ -223,6 +214,7 @@ function drawTutorial(tutorialType) {
         fill(227,63,95);
         rect( 20, 0, 15, video.height);
 
+        volume = mic.getLevel();
         console.log(volume * 200);
         let volumeHeight = map (volume * 200, 0, 150, video.height, 0);
         fill(255)
