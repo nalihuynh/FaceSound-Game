@@ -30,6 +30,7 @@ let MARGIN = 50;
 let canvas;
 
 let start = false;
+let pause = false;
 let userClicks = 0;
 let instructionsText = '';
 
@@ -93,6 +94,7 @@ function setup() {
 }
 
 function draw() {
+
     background(0);
 
     // double the asteroids if it falls below 50% of the original amount
@@ -145,6 +147,17 @@ function keyPressed() {
     if (key == ' ' && currentScreen != 'game') {
         currentScreen = 'game';
         getAudioContext().resume();
+    }
+
+    // press 'p' to pause/unpause in game
+    if (currentScreen == 'game') {
+        if (key == 'p' && !pause){
+            noLoop();
+            pause = true;
+        } else if (key == 'p' && pause){
+            loop();
+            pause = false;
+        }
     }
 }
 
