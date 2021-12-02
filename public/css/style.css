@@ -137,6 +137,8 @@ body, html {
 .game-title {
     margin-top: 20em;
     margin-bottom: 10em;
+    display: flex;
+    flex-direction: column;
 }
 
 .submenu-title {
@@ -197,3 +199,4 @@ a {
 .header {
     border-bottom: 2px dotted white;
 }
+
