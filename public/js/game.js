@@ -1,9 +1,9 @@
 let score = 0;
-let totalLives = 5;
-let livesNum = 5;
+let totalLives = 3;
+let livesNum = 3;
 
-let rotationSpeed = 5;
-let shipAcceleration = 0.5;
+let rotationSpeed = 2;
+let shipAcceleration = 0.25;
 
 let volumeThreshold = 5;
 

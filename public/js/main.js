@@ -20,7 +20,7 @@ let volume;
 let shipImg, bulletImg, particleImg;
 let bullets, asteroids, ship;
 
-let asteroidNum = 5;
+var asteroidNum;
 let asteroidImgs = [];
 let lasers = [];
 
@@ -46,6 +46,7 @@ function preload() {
 }
 
 function setup() {
+    asteroidNum = floor(random(5,15))
 
     // set up webcam video
     vidWidth = windowWidth / 3;
@@ -83,7 +84,7 @@ function setup() {
     asteroids = new Group();
     bullets = new Group();
     
-    for(let i = 0; i<8; i++) {
+    for(let i = 0; i<asteroidNum; i++) {
         let ang = random(360);
         let px = width/2 + 1000 * cos(radians(ang));
         let py = height/2+ 1000 * sin(radians(ang));
@@ -93,6 +94,16 @@ function setup() {
 
 function draw() {
     background(0);
+
+    // double the asteroids if it falls below 50% of the original amount
+    if (asteroids.length <= 0.5 * asteroidNum){
+        for(let i = 0; i<floor(asteroidNum/2); i++) {
+            let ang = random(360);
+            let px = width/2 + 1000 * cos(radians(ang));
+            let py = height/2+ 1000 * sin(radians(ang));
+            createAsteroid(3, px, py);
+        }
+    }
 
     switch (currentScreen) {
         case 'moveTutorial':
