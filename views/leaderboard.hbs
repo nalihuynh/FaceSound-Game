@@ -1,0 +1,40 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>facesound game - leaderboard</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="content start-screen">
+            <div class="submenu-title"><p>Leaderboard</p></div>
+            <ol class="leaderboard">
+                <li class="header leaderboard-listing">
+                        <span class="header-rank">rank</span> 
+                        <span class="header-name">player name</span> 
+                        <span class="header-score">score</span>
+                </li>
+
+                {{#each listings as |item i|}}
+                    <li class="leaderboard-listing">
+                        <span class="leaderboard-rank">{{i}}</span> 
+                        <span class="leaderboard-name">{{playerName}}</span> 
+                        <span class="leaderboard-score">{{score}}</span>
+                    </li>
+                {{/each}}
+            </ol>
+            <a href="/">
+                <button id="back-btn">back to menu</button>
+            </a>
+        </div>
+    </div>
+
+  <!-- Jquery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/js/leaderboard.js"></script> 
+</body>
+
+</html>
