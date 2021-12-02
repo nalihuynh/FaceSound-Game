@@ -8,11 +8,11 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container leaderboard-container">
         <div class="content start-screen">
             <div class="submenu-title"><p>Leaderboard</p></div>
-            <ol class="leaderboard">
-                <li class="header leaderboard-listing">
+            <ol id="leaderboard">
+                <li class="header">
                         <span class="header-rank">rank</span> 
                         <span class="header-name">player name</span> 
                         <span class="header-score">score</span>
@@ -22,7 +22,7 @@
                     <li class="leaderboard-listing">
                         <span class="leaderboard-rank">{{i}}</span> 
                         <span class="leaderboard-name">{{playerName}}</span> 
-                        <span class="leaderboard-score">{{score}}</span>
+                        <span id={{i}} class="leaderboard-score">{{score}}</span>
                     </li>
                 {{/each}}
             </ol>

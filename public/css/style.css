@@ -177,12 +177,14 @@ a {
 }
 
 
-.leaderboard {
+#leaderboard {
     list-style-type: none;
     width: 60%;
     margin: 0 20%;
     border: 2px dotted white;
     padding:0;
+    overflow-y: scroll;
+    height: 50vh;
 }
 
 .leaderboard-listing, .header {
