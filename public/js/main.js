@@ -20,7 +20,7 @@ let volume;
 let shipImg, bulletImg, particleImg;
 let bullets, asteroids, ship;
 
-let asteroidNum = 3;
+let asteroidNum = 5;
 let asteroidImgs = [];
 let lasers = [];
 
@@ -75,8 +75,10 @@ function setup() {
     ship = createSprite(width/2, height/2);
     ship.maxSpeed = 10;
     ship.friction = 0.08;
-    ship.setCollider('circle', 0,0,20);
+    ship.setCollider('circle', 0,0, 30);
     ship.addImage('normal', shipImg);
+
+    // ship.debug = true;
     
     asteroids = new Group();
     bullets = new Group();
@@ -223,7 +225,7 @@ function drawTutorial(tutorialType) {
 
         volume = mic.getLevel();
         let volumeHeight = map (volume * 200, 0, 150, video.height, 0);
-        
+
         fill(255)
         rect(20,0,15,volumeHeight);
     }

@@ -64,7 +64,7 @@ function drawUI() {
     // draw lives left
     for (let i = 0; i < totalLives; i++) {
         if (i < livesNum) {
-            fill(255,0,0);
+            fill(227,63,95);
         } else {
             fill(255);
         }
@@ -74,8 +74,10 @@ function drawUI() {
     }
 
     // draw score
-    fill(255);
-    text(`score: ${score}`, windowWidth - 100, 30);
+    fill(0);
+    textAlign(LEFT, BOTTOM);
+    textSize(14);
+    text(`SCORE: ${score}`, windowWidth *0.85, 40);
 }
 
 function showPlayerAndControls() {
@@ -94,7 +96,7 @@ function showPlayerAndControls() {
         rectMode(CENTER)
 
         // draw tiny square for nose
-        fill(255);
+        fill(227,63,95);
         textSize(30);
         text('+', faceX, faceY);
 
